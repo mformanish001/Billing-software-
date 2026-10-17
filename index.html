@@ -1,0 +1,90 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Bill of Supply Generator</title><style>
+*{box-sizing:border-box}body{margin:0;background:#edf2f7;color:#15263c;font:14px Arial,sans-serif}.toolbar{padding:16px 24px;background:#123458;color:white;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}button{background:#087c83;color:white;border:0;padding:10px 14px;border-radius:6px;cursor:pointer;margin:3px}button.secondary{background:#40576b}.layout{display:grid;grid-template-columns:minmax(300px,440px) minmax(600px,1fr);gap:18px;padding:20px;align-items:start}.editor{background:white;padding:18px;border-radius:10px;max-height:85vh;overflow:auto}.editor h3{margin:18px 0 8px;border-bottom:1px solid #ddd;padding-bottom:6px}.field{display:block;margin:8px 0;font-weight:600;font-size:12px}.field input,.field textarea{display:block;width:100%;padding:9px;margin-top:4px;border:1px solid #ccd4de;border-radius:5px;font:13px Arial}.field textarea{min-height:52px;resize:vertical}.paperwrap{overflow:auto}.paper{background:white;width:210mm;min-height:297mm;margin:auto;padding:12mm 10mm;box-shadow:0 3px 15px #a7b4c1;font:11px Arial;color:black}.billtitle{text-align:center;font-weight:bold;font-size:17px;margin:0 0 8px}.invoice{border:1px solid black}.topgrid{display:grid;grid-template-columns:1fr 1fr}.cell{padding:6px;border-right:1px solid black;border-bottom:1px solid black;min-height:42px;white-space:pre-line}.topgrid .cell:nth-child(even){border-right:0}.muted{font-size:10px;color:#444}.company{font-weight:bold;font-size:12px}.goods{width:100%;border-collapse:collapse}.goods th,.goods td{border:1px solid black;padding:7px 4px;text-align:left}.goods th{font-size:10px}.goods td.num{text-align:right}.goods input{width:100%;min-width:45px;border:0;font:11px Arial;background:transparent}.total{text-align:right;padding:10px;border-top:1px solid black;font-weight:bold}.foot{padding:8px;border-top:1px solid black;min-height:58px}.sign{text-align:right;padding-top:35px;font-weight:bold}.end{text-align:center;font-size:10px;padding:8px}.small{font-size:12px;color:#64748b}.items-editor{display:grid;grid-template-columns:1fr 1fr;gap:5px;padding:8px 0;border-bottom:1px solid #ddd}.items-editor .field{margin:2px 0}@media(max-width:1050px){.layout{display:block}.editor{max-height:none;margin-bottom:20px}.paper{margin:0}}@page{size:A4 portrait;margin:0}@media print{body{background:white}.toolbar,.editor{display:none!important}.layout{display:block;padding:0}.paperwrap{overflow:visible}.paper{width:210mm;height:297mm;min-height:0;box-shadow:none;margin:0;padding:10mm;break-after:avoid}.invoice{break-inside:avoid}}
+
+.goods{table-layout:fixed;width:100%;border-collapse:collapse}.goods th,.goods td{border:1px solid #555;padding:5px 3px;vertical-align:top;word-break:break-word}.goods th{height:53px;text-align:center;font-weight:normal}.goods th:nth-child(1){width:6%}.goods th:nth-child(2){width:25%}.goods th:nth-child(3){width:12%}.goods th:nth-child(4){width:13%}.goods th:nth-child(5){width:14%}.goods th:nth-child(6){width:12%}.goods th:nth-child(7){width:6%}.goods th:nth-child(8){width:12%}
+.goods tbody{height:58mm}.goods tbody td{border-top:0;border-bottom:0}.goods tbody td:nth-child(2),.goods tbody td:last-child{font-weight:bold}
+.summary,.tax-table{width:100%;border-collapse:collapse;table-layout:fixed}.summary td,.tax-table td{border:1px solid #555;padding:5px 4px}.summary td:first-child{width:65%}.summary td:nth-child(2){width:23%;text-align:right;font-weight:bold}.summary td:last-child{width:12%;text-align:right;font-weight:bold}
+.words-section{padding:5px 3px 10px;min-height:23mm}.words-head{display:flex;justify-content:space-between;margin-bottom:10px}.tax-table td:last-child{width:12%;text-align:right}.tax-table tr:first-child{height:23px}.tax-table tr:nth-child(2){height:29px}.tax-table tr:last-child{font-weight:bold}.taxwords{padding:5px 3px 10px;min-height:18mm}.taxwords #pan{margin-top:10px;font-weight:bold}
+.declaration-grid{display:grid;grid-template-columns:1fr 1fr;min-height:31mm;border-top:1px solid #555}.declaration-box{padding:4px;border-right:1px solid #555;white-space:pre-line}.signature-box{padding:5px 4px;display:flex;flex-direction:column;justify-content:space-between;text-align:right}.end{border-top:1px solid #555;padding:4px}
+@media print{.paper{padding:7mm 6mm;height:297mm}.goods tbody{height:55mm}.words-section{min-height:19mm}.taxwords{min-height:16mm}.declaration-grid{min-height:28mm}}
+
+/* Single-page A4 print: content remains together; no forced 297mm plus overflow. */
+@page { size: A4 portrait; margin: 4mm; }
+@media print {
+ html,body{margin:0!important;padding:0!important;width:100%!important;height:auto!important;overflow:visible!important;background:white!important}
+ .toolbar,.editor{display:none!important}
+ .layout{display:block!important;margin:0!important;padding:0!important;width:100%!important}
+ .paperwrap{display:block!important;overflow:visible!important;width:100%!important;margin:0!important;padding:0!important}
+ .paper{box-shadow:none!important;margin:0!important;padding:1mm!important;width:202mm!important;height:auto!important;min-height:0!important;max-height:none!important;break-after:auto!important;page-break-after:auto!important;zoom:var(--invoice-print-scale, .84)}
+ .invoice{break-inside:auto!important;page-break-inside:auto!important}
+ .billtitle{margin:0 0 3px!important;font-size:15px!important;break-after:avoid!important}
+ .cell{padding:3px 4px!important;min-height:27px!important;line-height:1.12!important}
+ .goods th,.goods td{padding:3px 2px!important}
+ .goods th{height:32px!important}
+ .goods tbody{height:42mm!important}
+ .summary td,.tax-table td{padding:3px!important}
+ .words-section{min-height:13mm!important;padding:3px!important}
+ .words-head{margin-bottom:4px!important}
+ .tax-table tr:first-child{height:17px!important}.tax-table tr:nth-child(2){height:19px!important}
+ .taxwords{min-height:12mm!important;padding:3px!important}
+ .taxwords #pan{margin-top:5px!important}
+ .declaration-grid{min-height:20mm!important}
+ .end{padding:2px!important}
+}
+
+.party-label{font-weight:700;color:#111}.party-name,.invoice-value,.goods-description{font-weight:700}.summary td:first-child{font-weight:700}.summary td:last-child{font-weight:700}
+
+/* Full-height A4 invoice: stretch the goods section to fill available space. */
+@page { size: A4 portrait; margin: 0; }
+@media print {
+  html,body { margin:0!important; padding:0!important; width:210mm!important; height:297mm!important; }
+  .toolbar,.editor { display:none!important; }
+  .layout,.paperwrap { display:block!important; width:210mm!important; height:297mm!important; margin:0!important; padding:0!important; overflow:visible!important; }
+  .paper {
+    width:210mm!important; height:297mm!important; min-height:297mm!important;
+    padding:5mm 6mm!important; margin:0!important; zoom:1!important;
+    display:flex!important; flex-direction:column!important; box-shadow:none!important;
+    break-after:avoid!important; page-break-after:avoid!important;
+  }
+  .billtitle { flex:none!important; font-size:13px!important; margin:0 0 3px!important; }
+  .invoice {
+    flex:1 1 auto!important; min-height:0!important;
+    display:flex!important; flex-direction:column!important;
+    break-inside:avoid!important; page-break-inside:avoid!important;
+  }
+  .topgrid,.summary,.words-section,.tax-table,.taxwords,.declaration-grid,.end { flex:0 0 auto!important; }
+  .cell { padding:3px 4px!important; min-height:25px!important; line-height:1.1!important; }
+  .goods {
+    flex:1 1 auto!important; height:100%!important; min-height:40mm!important;
+    border-collapse:collapse!important;
+  }
+  .goods tbody { height:auto!important; }
+  .goods th { height:30px!important; }
+  .goods th,.goods td { padding:3px 2px!important; }
+  .words-section { min-height:12mm!important; padding:3px!important; }
+  .taxwords { min-height:11mm!important; padding:3px!important; }
+  .declaration-grid { min-height:20mm!important; }
+  .end { padding:2px!important; }
+}
+</style></head><body><header class="toolbar"><strong>Bill of Supply Generator</strong><div><button onclick="save()">Save Draft</button><button class="secondary" onclick="load()">Load Draft</button><button onclick="printInvoice()">Print / Save PDF (A4)</button></div></header><main class="layout"><section class="editor" id="editor"><h2>Invoice details</h2><p class="small">Edit any field to update the printable invoice.</p><div id="fields"></div><h3>Goods / Items</h3><div id="itemsEditor"></div><button onclick="addItem()">+ Add item</button><button class="secondary" onclick="clearAll()">New invoice</button></section><section class="paperwrap"><div class="paper" id="paper"><div class="billtitle">Bill of Supply</div><div class="invoice"><div class="topgrid" id="top"></div><table class="goods"><thead><tr><th>Sl No.</th><th>Description of Goods</th><th>HSN/SAC</th><th>Quantity</th><th>Rate (Incl. of Tax)</th><th>Rate</th><th>per</th><th>Amount</th></tr></thead><tbody id="goods"></tbody></table><table class="summary"><tr><td><b>Total</b></td><td id="totalQty"></td><td id="total"></td></tr></table>
+<div class="words-section"><div class="words-head"><span>Amount Chargeable (in words)</span><span>E. &amp; O.E</span></div><b id="words"></b></div>
+<table class="tax-table"><tr><td></td><td>Taxable Value</td></tr><tr><td></td><td id="taxable"></td></tr><tr><td style="text-align:right"><b>Total:</b></td><td id="taxTotal"><b></b></td></tr></table>
+<div class="taxwords"><b>Tax Amount (in words): &nbsp; NIL</b><div id="pan"></div></div>
+<div class="declaration-grid"><div class="declaration-box"><div>Declaration</div><div id="declaration"></div></div><div class="signature-box"><b id="signCompany"></b><b>Authorised Signatory</b></div></div><div class="end">This is a Computer Generated Invoice</div></div></div></section></main><script>
+const groups=[['Company Details',[['company','Company Name'],['address','Company Address'],['pan','Company PAN'],['gstin','Company GSTIN']]],['Invoice Details',[['invoice','Invoice No.'],['date','Invoice Date'],['deliveryNote','Delivery Note'],['payment','Mode/Terms of Payment'],['reference','Other References'],['order','Buyer’s Order No.']]],['Buyer / Consignee',[['consignee','Consignee (Ship to)'],['buyer','Buyer (Bill to)']]],['Dispatch Details',[['dispatch','Dispatch Doc No.'],['deliveryDate','Delivery Note Date'],['through','Dispatched Through'],['destination','Destination'],['lading','Bill of Lading / LR-RR No.'],['vehicle','Motor Vehicle No.'],['terms','Terms of Delivery']]],['Other',[['declaration','Declaration']]]];
+let data={company:'',address:'',pan:'',gstin:'',invoice:'',date:'',deliveryNote:'',payment:'',reference:'',order:'',consignee:'',buyer:'',dispatch:'',deliveryDate:'',through:'',destination:'',lading:'',vehicle:'',terms:'',declaration:'We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.'};let items=[{description:'',hsn:'',quantity:'',rate:'',unit:''}];const escapeHtml=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const money=n=>Number(n).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2});
+function wordNumber(n){n=Math.floor(n);if(!n)return 'Zero';let a=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'],b=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];function small(x){return x<20?a[x]:x<100?b[Math.floor(x/10)]+(x%10?' '+a[x%10]:''):a[Math.floor(x/100)]+' Hundred'+(x%100?' '+small(x%100):'')}let parts=[];for(let [v,t] of [[10000000,'Crore'],[100000,'Lakh'],[1000,'Thousand']]){let q=Math.floor(n/v);if(q){parts.push(small(q)+' '+t);n%=v}}if(n)parts.push(small(n));return parts.join(' ')}
+function field(id,label){return `<label class="field">${label}${["date","deliveryDate"].includes(id)?`<input type="date" data-key="${id}" value="${escapeHtml(data[id])}">`:`<textarea data-key="${id}">${escapeHtml(data[id])}</textarea>`}</label>`}function drawEditor(){document.getElementById('fields').innerHTML=groups.map(([title,fields])=>`<h3>${title}</h3>${fields.map(([id,label])=>field(id,label)).join('')}`).join('');document.querySelectorAll('[data-key]').forEach(el=>el.addEventListener('input',()=>{data[el.dataset.key]=el.value;render()}));document.getElementById('itemsEditor').innerHTML=items.map((it,i)=>`<div class="items-editor">${[['description','Description'],['hsn','HSN/SAC'],['quantity','Quantity'],['rate','Rate'],['unit','Unit']].map(([k,label])=>`<label class="field">${label}<input data-i="${i}" data-col="${k}" value="${escapeHtml(it[k])}"></label>`).join('')}<button class="secondary" onclick="removeItem(${i})">Remove</button></div>`).join('');document.querySelectorAll('[data-i]').forEach(el=>el.addEventListener('input',()=>{items[+el.dataset.i][el.dataset.col]=el.value;render()}))}
+function formatInvoiceDate(value){if(!/^\d{4}-\d{2}-\d{2}$/.test(value||''))return value||'';const [year,month,day]=value.split('-');return `${day}-${month}-${year}`;}
+function boldFirstLine(value){let lines=String(value||'').split('\n');return lines.length?`<strong class="party-name">${escapeHtml(lines[0])}</strong>${lines.length>1?'\n'+escapeHtml(lines.slice(1).join('\n')):''}`:''}
+function render(){let cells=[[`<strong class="company">${escapeHtml(data.company)}</strong>\n${escapeHtml(data.address)}\n${data.gstin?'GSTIN: '+escapeHtml(data.gstin):''}`,'Invoice No.',data.invoice,'Dated',formatInvoiceDate(data.date)],['Consignee (Ship to)',data.consignee,'Delivery Note',data.deliveryNote],['Buyer (Bill to)',data.buyer,'Mode/Terms of Payment',data.payment],['Other References',data.reference,'Buyer’s Order No.',data.order],['Dispatch Doc No.',data.dispatch,'Delivery Note Date',formatInvoiceDate(data.deliveryDate)],['Dispatched through',data.through,'Destination',data.destination],['Bill of Lading/LR-RR No.',data.lading,'Motor Vehicle No.',data.vehicle],['Terms of Delivery',data.terms,'','']];document.getElementById('top').innerHTML=cells.map((c,i)=>i===0?`<div class="cell">${c[0]}</div><div class="cell"><span class="muted">${c[1]}</span> ${`<strong class="invoice-value">${escapeHtml(c[2])}</strong>`}<hr><span class="muted">${c[3]}</span> <strong class="invoice-value">${escapeHtml(c[4])}</strong></div>`:`<div class="cell"><span class="muted ${i===1||i===2?'party-label':''}">${escapeHtml(c[0])}</span>\n${i===1||i===2?boldFirstLine(c[1]):escapeHtml(c[1])}</div><div class="cell"><span class="muted">${escapeHtml(c[2])}</span>\n${i===5||i===6?`<strong class="invoice-value">${escapeHtml(c[3])}</strong>`:escapeHtml(c[3])}</div>`).join('');let total=0;document.getElementById('goods').innerHTML=items.map((it,i)=>{let sum=(+it.quantity||0)*(+it.rate||0);total+=sum;return `<tr><td>${i+1}</td><td class="goods-description" style="white-space:pre-line">${escapeHtml(it.description)}</td><td>${escapeHtml(it.hsn)}</td><td class="num">${escapeHtml(it.quantity)}${it.unit?" "+escapeHtml(it.unit):""}</td><td class="num">${money(it.rate||0)}</td><td class="num">${money(it.rate||0)}</td><td>${escapeHtml(it.unit)}</td><td class="num amount-cell">${it.quantity!==""&&it.rate!==""?money(sum):""}</td></tr>`}).join('');document.getElementById('total').textContent=money(total);document.getElementById('taxable').textContent=money(total);document.getElementById('taxTotal').textContent=money(total);let qty=items.reduce((a,it)=>a+(Number(it.quantity)||0),0);let units=[...new Set(items.map(it=>it.unit.trim()).filter(Boolean))];document.getElementById('totalQty').textContent=qty?qty.toLocaleString('en-IN',{maximumFractionDigits:3})+(units.length===1?' '+units[0]:''):'';let whole=Math.floor(total),paisa=Math.round((total-whole)*100);document.getElementById('words').textContent='INR '+wordNumber(whole)+(paisa?' and '+wordNumber(paisa)+' Paise':'')+' Only';document.getElementById('pan').textContent='Company’s PAN: '+data.pan;document.getElementById('declaration').textContent=data.declaration;document.getElementById('signCompany').textContent=data.company?'for '+data.company:'';}
+function printInvoice(){
+ const paper=document.getElementById('paper');
+ paper.style.removeProperty('--invoice-print-scale');
+ // At CSS print scale .84, measure natural invoice height and fit to A4 printable area.
+ const contentHeight=paper.scrollHeight;
+ const availablePx= (297-8)*96/25.4;
+ const scale=Math.min(.84, availablePx/(contentHeight+16)*.97);
+ paper.style.setProperty('--invoice-print-scale',String(Math.max(.45,scale)));
+ window.print();
+}function addItem(){items.push({description:'',hsn:'',quantity:'',rate:'',unit:''});drawEditor();render()}function removeItem(i){items.splice(i,1);drawEditor();render()}function save(){localStorage.setItem('bill-supply-draft',JSON.stringify({data,items}));alert('Draft saved in this browser.')}function load(){let v=localStorage.getItem('bill-supply-draft');if(!v)return alert('No saved draft found.');let obj=JSON.parse(v);data={...data,...obj.data};if(!data.declaration)data.declaration='We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.';items=obj.items;drawEditor();render()}function clearAll(){if(!confirm('Start a new invoice? Unsaved changes will be lost.'))return;for(let k in data)data[k]=k==='declaration'?'We declare that this invoice shows the actual price of the goods described and that all particulars are true and correct.':'';items=[{description:'',hsn:'',quantity:'',rate:'',unit:''}];drawEditor();render()}drawEditor();render();</script></body></html>
